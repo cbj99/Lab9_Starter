@@ -7,6 +7,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lab 9</title>
 
+
+  <!--Step 5 - The Global Error handler and 3rd Party Tracking-->
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({
+      token: "6b4c8cab849e47a7b8af51705057f146"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
+
   <style>
     button {
       margin: 3px;
@@ -88,50 +98,157 @@
   </main>
 
   <script>
+    //window.addEventListener
+    window.addEventListener('error', function () {
+      console.log("Sadly an error happened my friend");
+    })
+    
+    //Step 4 - Throw and Custom Errors part1
+    class ValidationError extends Error {
+      constructor(message) {
+        super(message); // (1)
+        this.name = "ValidationError"; // (2)
+      }
+    }
+
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
+
       let output = document.querySelector('output');
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      
+      //Step 3 - Trying Try/Catch
+      //It works for both inputs
+      try {
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      } catch (err) {
+        console.log("Sadly an error happened my friend");
+        console.error(err.stack); // a list of nested calls with line numbers for each
+      }
+
+      //Step 4 - Throw and Custom Errors part2
+      //It works only when the second input is not a number
+      try {
+        if (isNaN(secondNum)) {
+          //throw and custom error
+          throw new ValidationError("The second input is not a number!");
+        }
+      } catch (err) {
+        console.log("Sadly an error happened my friend");
+        console.error(err.stack); // a list of nested calls with line numbers for each
+      }
+      
+      //Step 5 - The Global Error handler and 3rd Party Tracking
+      TrackJS.track('Testing TrackJS!');
+
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
     //console.log(errorBtns);
     // Start your code here
     // You may move this JS to another file if you wish
-    
+
+    //Step 2 - Adding Buttons for Console Testing
 
     //button 1: Console Log
-    errorBtns[0].addEventListener('click', function(){
+    errorBtns[0].addEventListener('click', function () {
       console.log('Console Log Demo');
     })
     //button 2: Console Error
-    errorBtns[1].addEventListener('click', function(){
+    errorBtns[1].addEventListener('click', function () {
       console.error('Console Error Demo');
     })
     //button 3: Console Count
-    errorBtns[2].addEventListener('click', function(){
+    errorBtns[2].addEventListener('click', function () {
       console.count('Count Button');
     })
     //button 4: Console Warn
-    errorBtns[3].addEventListener('click', function(){
+    errorBtns[3].addEventListener('click', function () {
       console.warn('Console Warn Button');
     })
     //button 5: Console Assert
-    errorBtns[4].addEventListener('click', function(){
+    errorBtns[4].addEventListener('click', function () {
       const number = 2;
       const errorMsg = 'The number does not equal 3';
-      console.assert(number == 3, {number, errorMsg});
+      console.assert(number == 3, { number, errorMsg });
     })
     //button 6: Console Clear
-    errorBtns[5].addEventListener('click', function(){
+    errorBtns[5].addEventListener('click', function () {
       console.clear();
     })
+    //button 7: Console Dir
+    errorBtns[6].addEventListener('click', function () {
+      const button = document.createElement("button");
+      console.dir(button);
+    })
+    //button 8: Console dirxml
+    errorBtns[7].addEventListener('click', function () {
+      const button = document.createElement("button");
+      button.textContent = "Console dirxml";
+      console.dirxml(button);
+    })
 
+    const label = 'console.group';
+    //button 9: Console Group Start
+    errorBtns[8].addEventListener('click', function () {
+      console.group(label);
+    })
+    //button 10: Console Group End
+    errorBtns[9].addEventListener('click', function () {
+      console.groupEnd(label);
+    })
 
+    //button 11: Console Table
+    errorBtns[10].addEventListener('click', function () {
+      console.table([
+        {
+          name: 'Software Engineering',
+          num: '110',
+        },
+        {
+          name: 'Programming Language',
+          num: '130',
+        },
+        {
+          name: 'Advanced Software',
+          num: '112',
+        }
+      ]);
+    })
+
+    const temp_label = 'Timer Button';
+    //button 12: Console Group End
+    errorBtns[11].addEventListener('click', function () {
+      console.time(temp_label);
+    })
+    //button 13: Console Group End
+    errorBtns[12].addEventListener('click', function () {
+      console.timeEnd(temp_label);
+    })
+
+    //button 14: Console Trace
+    errorBtns[13].addEventListener('click', function () {
+      const handleBtnClick = () => { deep(); };
+      const deep = () => { deeper(); };
+      const deeper = () => { deepest(); };
+      const deepest = () => { console.trace(); };
+      handleBtnClick();
+    })
+
+    //button 15: Trigger a Global Error
+    function experiment(a) {
+      return a + boom;
+    }
+    errorBtns[14].addEventListener('click', function () {
+      var temp = 3;
+      temp = experiment(temp);
+    })
+
+    
+    
 
   </script>
 </body>
