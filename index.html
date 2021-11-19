@@ -99,9 +99,40 @@
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
-
+    //console.log(errorBtns);
     // Start your code here
     // You may move this JS to another file if you wish
+    
+
+    //button 1: Console Log
+    errorBtns[0].addEventListener('click', function(){
+      console.log('Console Log Demo');
+    })
+    //button 2: Console Error
+    errorBtns[1].addEventListener('click', function(){
+      console.error('Console Error Demo');
+    })
+    //button 3: Console Count
+    errorBtns[2].addEventListener('click', function(){
+      console.count('Count Button');
+    })
+    //button 4: Console Warn
+    errorBtns[3].addEventListener('click', function(){
+      console.warn('Console Warn Button');
+    })
+    //button 5: Console Assert
+    errorBtns[4].addEventListener('click', function(){
+      const number = 2;
+      const errorMsg = 'The number does not equal 3';
+      console.assert(number == 3, {number, errorMsg});
+    })
+    //button 6: Console Clear
+    errorBtns[5].addEventListener('click', function(){
+      console.clear();
+    })
+
+
+
   </script>
 </body>
 
